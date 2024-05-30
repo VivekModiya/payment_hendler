@@ -28,3 +28,16 @@ VALUES
   address,
   sum_of_rupees,
   id;
+
+-- name: GetPaymentDetails :one
+SELECT
+  id,
+  "date",
+  received_from,
+  pan,
+  address,
+  sum_of_rupees
+FROM
+  payment_handler.tblm_payment_details
+WHERE
+  id = $1 :: INTEGER;

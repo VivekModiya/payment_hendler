@@ -98,3 +98,40 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 	err := row.Scan(&i.UserID, &i.Name, &i.Role)
 	return i, err
 }
+
+const getPaymentDetails = `-- name: GetPaymentDetails :one
+SELECT
+  id,
+  "date",
+  received_from,
+  pan,
+  address,
+  sum_of_rupees
+FROM
+  payment_handler.tblm_payment_details
+WHERE
+  id = $1 :: INTEGER
+`
+
+type GetPaymentDetailsRow struct {
+	ID           sql.NullInt32
+	Date         int64
+	ReceivedFrom string
+	Pan          string
+	Address      string
+	SumOfRupees  string
+}
+
+func (q *Queries) GetPaymentDetails(ctx context.Context, dollar_1 int32) (GetPaymentDetailsRow, error) {
+	row := q.db.QueryRowContext(ctx, getPaymentDetails, dollar_1)
+	var i GetPaymentDetailsRow
+	err := row.Scan(
+		&i.ID,
+		&i.Date,
+		&i.ReceivedFrom,
+		&i.Pan,
+		&i.Address,
+		&i.SumOfRupees,
+	)
+	return i, err
+}

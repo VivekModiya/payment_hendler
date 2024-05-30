@@ -25,4 +25,5 @@ type HttpResponse struct {
 // Applicant subrouter having prefix-route of /api/v3/recruitment/applicants
 func (p *Payment) Routes() {
 	p.Router.HandleFunc("/add-details", p.AddPaymentDetails)
+	p.Router.HandleFunc("/get-details/{id}", p.GetPaymentDetails)
 }
