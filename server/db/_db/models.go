@@ -9,6 +9,7 @@ import (
 )
 
 type PaymentHandlerTblmPaymentDetail struct {
+	ID           sql.NullInt32
 	Date         int64
 	ReceivedFrom string
 	Pan          string

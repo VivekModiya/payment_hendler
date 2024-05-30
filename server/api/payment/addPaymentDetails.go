@@ -14,6 +14,7 @@ type PaymentData struct {
 	Pan          string `json:"pan" validate:"required"`
 	Address      string `json:"address" validate:"required"`
 	SumOfRupees  string `json:"sumOfRupees" validate:"required"`
+	ID           int32  `json:"paymentDetailId"`
 }
 
 func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +59,7 @@ func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {
 	jsonResponse.Pan = res.Pan
 	jsonResponse.Address = res.Address
 	jsonResponse.SumOfRupees = res.SumOfRupees
+	jsonResponse.ID = res.ID.Int32
 
 	formatting.WriteJSONResponse(w, &jsonResponse)
 }

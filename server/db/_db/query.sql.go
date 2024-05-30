@@ -7,6 +7,7 @@ package _db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const addPaymentDetails = `-- name: AddPaymentDetails :one
@@ -29,7 +30,8 @@ VALUES
   received_from,
   pan,
   address,
-  sum_of_rupees
+  sum_of_rupees,
+  id
 `
 
 type AddPaymentDetailsParams struct {
@@ -46,6 +48,7 @@ type AddPaymentDetailsRow struct {
 	Pan          string
 	Address      string
 	SumOfRupees  string
+	ID           sql.NullInt32
 }
 
 func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsParams) (AddPaymentDetailsRow, error) {
@@ -63,6 +66,7 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 		&i.Pan,
 		&i.Address,
 		&i.SumOfRupees,
+		&i.ID,
 	)
 	return i, err
 }

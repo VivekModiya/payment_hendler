@@ -9,7 +9,8 @@ CREATE TABLE payment_handler.tblm_users (
 );
 
 CREATE TABLE payment_handler.tblm_payment_details (
-    DATE BIGINT NOT NULL,
+    id SERIAL UNIQUE,
+    "date" BIGINT NOT NULL,
     received_from VARCHAR(255) NOT NULL,
     pan VARCHAR(10) NOT NULL,
     address TEXT NOT NULL,

@@ -26,4 +26,5 @@ VALUES
   received_from,
   pan,
   address,
-  sum_of_rupees;
+  sum_of_rupees,
+  id;
