@@ -24,5 +24,5 @@ type HttpResponse struct {
 
 // Applicant subrouter having prefix-route of /api/v3/recruitment/applicants
 func (a *User) Routes() {
-	a.Router.HandleFunc("/create", a.CreateUser)
+	a.Router.HandleFunc("/add", a.CreateUser)
 }

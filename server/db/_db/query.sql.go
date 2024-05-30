@@ -17,7 +17,8 @@ INSERT INTO
     received_from,
     pan,
     address,
-    sum_of_rupees
+    sum_of_rupees,
+    user_id
   )
 VALUES
   (
@@ -25,13 +26,15 @@ VALUES
     $2 :: VARCHAR,
     $3 :: VARCHAR,
     $4 :: TEXT,
-    $5 :: BIGINT
+    $5 :: BIGINT,
+    $6 :: VARCHAR
   ) RETURNING DATE,
   received_from,
   pan,
   address,
   sum_of_rupees,
-  id
+  id,
+  user_id
 `
 
 type AddPaymentDetailsParams struct {
@@ -40,6 +43,7 @@ type AddPaymentDetailsParams struct {
 	Column3 string
 	Column4 string
 	Column5 int64
+	Column6 string
 }
 
 type AddPaymentDetailsRow struct {
@@ -49,6 +53,7 @@ type AddPaymentDetailsRow struct {
 	Address      string
 	SumOfRupees  string
 	ID           sql.NullInt32
+	UserID       sql.NullString
 }
 
 func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsParams) (AddPaymentDetailsRow, error) {
@@ -58,6 +63,7 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 		arg.Column3,
 		arg.Column4,
 		arg.Column5,
+		arg.Column6,
 	)
 	var i AddPaymentDetailsRow
 	err := row.Scan(
@@ -67,6 +73,7 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 		&i.Address,
 		&i.SumOfRupees,
 		&i.ID,
+		&i.UserID,
 	)
 	return i, err
 }

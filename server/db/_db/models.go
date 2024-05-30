@@ -17,6 +17,7 @@ type PaymentHandlerTblmPaymentDetail struct {
 	SumOfRupees  string
 	CreatedAt    sql.NullTime
 	IsActive     sql.NullBool
+	UserID       sql.NullString
 }
 
 type PaymentHandlerTblmUser struct {

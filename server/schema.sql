@@ -16,5 +16,6 @@ CREATE TABLE payment_handler.tblm_payment_details (
     address TEXT NOT NULL,
     sum_of_rupees NUMERIC(15, 2) NOT NULL,
     created_at DATE DEFAULT CURRENT_DATE,
-    is_active BOOLEAN DEFAULT TRUE
+    is_active BOOLEAN DEFAULT TRUE,
+    user_id VARCHAR(255) REFERENCES payment_handler.tblm_users(user_id)
 );
