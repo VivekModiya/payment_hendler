@@ -44,3 +44,15 @@ FROM
   payment_handler.tblm_payment_details
 WHERE
   id = $1 :: INTEGER;
+
+-- name: ListPaymentDetails :many
+SELECT
+  received_from,
+  "date",
+  sum_of_rupees,
+  id
+FROM
+  payment_handler.tblm_payment_details
+WHERE
+  received_from ILIKE '%' || $1 :: VARCHAR || '%'
+  OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%';

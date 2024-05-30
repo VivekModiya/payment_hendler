@@ -26,4 +26,5 @@ type HttpResponse struct {
 func (p *Payment) Routes() {
 	p.Router.HandleFunc("/add-details", p.AddPaymentDetails)
 	p.Router.HandleFunc("/get-details/{id}", p.GetPaymentDetails)
+	p.Router.HandleFunc("/list", p.ListPaymentDetails)
 }

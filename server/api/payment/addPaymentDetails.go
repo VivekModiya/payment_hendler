@@ -9,13 +9,13 @@ import (
 )
 
 type PaymentData struct {
-	Date         int64  `json:"date" validate:"required"`
-	ReceivedFrom string `json:"receiveFrom" validate:"required"`
-	Pan          string `json:"pan" validate:"required"`
-	Address      string `json:"address" validate:"required"`
-	SumOfRupees  string `json:"sumOfRupees" validate:"required"`
-	ID           int32  `json:"paymentDetailId"`
-	UserID       string `json:"userId" validate:"required"`
+	Date         int64  `json:"date,omitempty" validate:"required"`
+	ReceivedFrom string `json:"receiveFrom,omitempty" validate:"required"`
+	Pan          string `json:"pan,omitempty" validate:"required"`
+	Address      string `json:"address,omitempty" validate:"required"`
+	SumOfRupees  string `json:"sumOfRupees,omitempty" validate:"required"`
+	ID           int32  `json:"paymentDetailId,omitempty"`
+	UserID       string `json:"userId,omitempty" validate:"required"`
 }
 
 func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {

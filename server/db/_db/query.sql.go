@@ -142,3 +142,51 @@ func (q *Queries) GetPaymentDetails(ctx context.Context, dollar_1 int32) (GetPay
 	)
 	return i, err
 }
+
+const listPaymentDetails = `-- name: ListPaymentDetails :many
+SELECT
+  received_from,
+  "date",
+  sum_of_rupees,
+  id
+FROM
+  payment_handler.tblm_payment_details
+WHERE
+  received_from ILIKE '%' || $1 :: VARCHAR || '%'
+  OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%'
+`
+
+type ListPaymentDetailsRow struct {
+	ReceivedFrom string
+	Date         int64
+	SumOfRupees  string
+	ID           sql.NullInt32
+}
+
+func (q *Queries) ListPaymentDetails(ctx context.Context, dollar_1 string) ([]ListPaymentDetailsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listPaymentDetails, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListPaymentDetailsRow
+	for rows.Next() {
+		var i ListPaymentDetailsRow
+		if err := rows.Scan(
+			&i.ReceivedFrom,
+			&i.Date,
+			&i.SumOfRupees,
+			&i.ID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
