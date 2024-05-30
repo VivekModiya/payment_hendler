@@ -12,7 +12,7 @@ type PaymentHandlerTblmPaymentDetail struct {
 	Date         int64
 	ReceivedFrom string
 	Pan          string
-	Address      sql.NullString
+	Address      string
 	SumOfRupees  string
 	CreatedAt    sql.NullTime
 	IsActive     sql.NullBool

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"payment_handler/api/payment"
 	"payment_handler/api/user"
 	"payment_handler/db"
 
@@ -16,6 +17,7 @@ type Server struct {
 	validate *validator.Validate
 	router   *mux.Router
 	user     *user.User
+	payment  *payment.Payment
 }
 
 type HttpResponse struct {
@@ -30,6 +32,9 @@ func (s *Server) Routes() {
 
 	s.user.Router = s.router.PathPrefix("/users").Subrouter()
 	s.user.Routes()
+
+	s.payment.Router = s.router.PathPrefix("/payments").Subrouter()
+	s.payment.Routes()
 
 	http.Handle("/", s.router)
 }

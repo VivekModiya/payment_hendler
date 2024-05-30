@@ -12,7 +12,7 @@ CREATE TABLE payment_handler.tblm_payment_details (
     DATE BIGINT NOT NULL,
     received_from VARCHAR(255) NOT NULL,
     pan VARCHAR(10) NOT NULL,
-    address TEXT,
+    address TEXT NOT NULL,
     sum_of_rupees NUMERIC(15, 2) NOT NULL,
     created_at DATE DEFAULT CURRENT_DATE,
     is_active BOOLEAN DEFAULT TRUE

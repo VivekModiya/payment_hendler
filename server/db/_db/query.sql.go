@@ -9,6 +9,64 @@ import (
 	"context"
 )
 
+const addPaymentDetails = `-- name: AddPaymentDetails :one
+INSERT INTO
+  payment_handler.tblm_payment_details (
+    "date",
+    received_from,
+    pan,
+    address,
+    sum_of_rupees
+  )
+VALUES
+  (
+    $1 :: BIGINT,
+    $2 :: VARCHAR,
+    $3 :: VARCHAR,
+    $4 :: TEXT,
+    $5 :: BIGINT
+  ) RETURNING DATE,
+  received_from,
+  pan,
+  address,
+  sum_of_rupees
+`
+
+type AddPaymentDetailsParams struct {
+	Column1 int64
+	Column2 string
+	Column3 string
+	Column4 string
+	Column5 int64
+}
+
+type AddPaymentDetailsRow struct {
+	Date         int64
+	ReceivedFrom string
+	Pan          string
+	Address      string
+	SumOfRupees  string
+}
+
+func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsParams) (AddPaymentDetailsRow, error) {
+	row := q.db.QueryRowContext(ctx, addPaymentDetails,
+		arg.Column1,
+		arg.Column2,
+		arg.Column3,
+		arg.Column4,
+		arg.Column5,
+	)
+	var i AddPaymentDetailsRow
+	err := row.Scan(
+		&i.Date,
+		&i.ReceivedFrom,
+		&i.Pan,
+		&i.Address,
+		&i.SumOfRupees,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO
   payment_handler.tblm_users (user_id, "role", "name")
