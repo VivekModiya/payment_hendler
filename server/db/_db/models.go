@@ -8,9 +8,20 @@ import (
 	"database/sql"
 )
 
-type ExampleTable struct {
-	ID        int32
-	Name      sql.NullString
-	Email     sql.NullString
+type PaymentHandlerTblmPaymentDetail struct {
+	Date         int64
+	ReceivedFrom string
+	Pan          string
+	Address      sql.NullString
+	SumOfRupees  string
+	CreatedAt    sql.NullTime
+	IsActive     sql.NullBool
+}
+
+type PaymentHandlerTblmUser struct {
+	ID        sql.NullInt32
+	UserID    string
+	Name      string
+	Role      string
 	CreatedAt sql.NullTime
 }

@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 
+	"payment_handler/api/user"
 	"payment_handler/db"
 	"payment_handler/middleware"
 
@@ -21,9 +22,15 @@ func New(ctx context.Context, connstr string, maxDBConn int) (*Server, error) {
 
 	validatorInst := validator.New()
 
+	userInstance := &user.User{
+		DB:       dbInst,
+		Validate: validatorInst,
+	}
+
 	return &Server{
 		router:   routerInst,
 		db:       dbInst,
 		validate: validatorInst,
+		user:     userInstance,
 	}, nil
 }

@@ -18,7 +18,7 @@ var dbName = os.Getenv("DB_NAME")
 
 var (
 	addr                = flag.String("addr", ":8080", "Address to listen on")
-	flagDBConnStr       = flag.String("db-conn-str", "postgresql://"+user+":"+password+"@"+host+"/"+dbName+"?sslmode=disable", "Postgres connection string")
+	flagDBConnStr       = flag.String("db-conn-str", "postgres://"+user+":"+password+"@"+host+"/"+dbName+"?sslmode=require", "Postgres connection string")
 	flagMaxDBConnection = flag.Int("max-db-connections", 10, "Connection pool size")
 )
 
