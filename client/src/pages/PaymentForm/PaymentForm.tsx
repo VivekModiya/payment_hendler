@@ -4,37 +4,11 @@ import {
     InputAdornment,
     TextField,
     Typography,
-    MenuItem,
 } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import {
-    ChevronLeft,
-    ChevronRightRounded,
-    MailOutlineRounded,
-} from '@mui/icons-material';
-import React from 'react';
+
+import { ChevronLeftRounded, MailOutlineRounded } from '@mui/icons-material';
 
 export const PaymentForm = () => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const [anchorEll, setAnchorEll] = React.useState<null | HTMLElement>(null);
-    const openn = Boolean(anchorEll);
-    const handleClickk = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEll(event.currentTarget);
-    };
-    const handleClosee = () => {
-        setTimeout(() => {
-            setAnchorEll(null);
-        }, 200);
-    };
-
     return (
         <Box
             height={'100%'}
@@ -61,7 +35,7 @@ export const PaymentForm = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <ChevronLeft fontSize='medium' />
+                    <ChevronLeftRounded fontSize='medium' />
                 </Box>
                 <Typography variant='h5' fontWeight={700}>
                     Fill the Form
@@ -79,45 +53,6 @@ export const PaymentForm = () => {
                 flexDirection={'column'}
                 boxSizing='border-box'
             >
-                <Button
-                    id='basic-button'
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup='true'
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
-                >
-                    Dashboard
-                </Button>
-                <Menu
-                    id='basic-menu'
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    <MenuItem onClick={handleClickk}>Click</MenuItem>
-                    <MenuItem>My account</MenuItem>
-                    <MenuItem>Logout</MenuItem>
-                </Menu>
-                <Menu
-                    anchorEl={anchorEll}
-                    open={openn}
-                    onClose={handleClosee}
-                    anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-                >
-                    <MenuItem>
-                        <Button
-                            startIcon={<ChevronRightRounded />}
-                            variant='text'
-                        >
-                            Click
-                        </Button>
-                    </MenuItem>
-                    <MenuItem>My account</MenuItem>
-                    <MenuItem>Logout</MenuItem>
-                </Menu>
                 <TextField
                     variant='standard'
                     fullWidth

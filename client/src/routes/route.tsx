@@ -1,5 +1,5 @@
 import { Route } from '../models/Route';
-import { Navigator } from '../pages';
+import { Navigator, PaymentListing } from '../pages';
 import { PaymentForm } from '../pages/PaymentForm/PaymentForm';
 export const PATH = {
     LOGIN: '/login',
@@ -33,6 +33,6 @@ export const routes: Route[] = [
     {
         path: PATH.LIST_DETAILS,
         exact: true,
-        component: <h1>Vivek</h1>,
+        component: <PaymentListing />,
     },
 ];
