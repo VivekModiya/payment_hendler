@@ -1,6 +1,6 @@
 import { Route } from '../models/Route';
-import { Navigator, PaymentListing } from '../pages';
-import { PaymentForm } from '../pages/PaymentForm/PaymentForm';
+import { Login, Navigator, PaymentListing } from '../pages';
+import { Template } from '../pages/PaymentForm';
 export const PATH = {
     LOGIN: '/login',
     NAVIGATOR: '/navigator',
@@ -13,7 +13,7 @@ export const routes: Route[] = [
     {
         path: PATH.LOGIN,
         exact: true,
-        component: <h1>Vivek</h1>,
+        component: <Login />,
     },
     {
         path: PATH.NAVIGATOR,
@@ -23,7 +23,7 @@ export const routes: Route[] = [
     {
         path: PATH.ADD_DETAIL,
         exact: true,
-        component: <PaymentForm />,
+        component: <Template />,
     },
     {
         path: PATH.GET_DETAIL,
