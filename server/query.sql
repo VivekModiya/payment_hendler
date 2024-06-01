@@ -1,8 +1,8 @@
 -- name: CreateUser :one
 INSERT INTO
-  payment_handler.tblm_users (user_id, "role", "name")
+  payment_handler.tblm_users (user_id, "role", "name", parent_user_id)
 VALUES
-  ($1, $2, $3) RETURNING user_id,
+  ($1, $2, $3, $4) RETURNING user_id,
   "name",
   "role";
 
@@ -55,10 +55,13 @@ SELECT
 FROM
   payment_handler.tblm_payment_details pd
 WHERE
-  received_from ILIKE '%' || $1 :: VARCHAR || '%'
-  OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%'
-  AND (
-    (
+  (
+    received_from ILIKE '%' || $1 :: VARCHAR || '%'
+    OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%'
+  )
+  AND CASE
+    WHEN $3 :: BOOLEAN = FALSE THEN pd.user_id = $2 :: VARCHAR
+    ELSE (
       SELECT
         role
       FROM
@@ -69,11 +72,10 @@ WHERE
     OR pd.user_id = $2
     OR (
       SELECT
-        user_id
+        parent_user_id
       FROM
-        payment_handler.parent_user us
+        payment_handler.tblm_users us
       WHERE
         us.user_id = pd.user_id
-        AND parent_user_id = $2
-    ) = pd.user_id
-  );
+    ) = $2
+  END;

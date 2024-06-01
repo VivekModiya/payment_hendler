@@ -1,11 +1,25 @@
 CREATE SCHEMA payment_handler;
 
 CREATE TABLE payment_handler.tblm_users (
-    id SERIAL UNIQUE,
-    user_id VARCHAR(255) PRIMARY KEY,
-    NAME VARCHAR(20) NOT NULL,
-    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'client', 'end_user')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id int4 NOT NULL DEFAULT NEXTVAL('payment_handler.tblt_users_id_seq' :: regclass),
+    user_id VARCHAR(255) NOT NULL,
+    "role" VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" VARCHAR(20) NOT NULL,
+    parent_user_id VARCHAR NOT NULL,
+    CONSTRAINT tblt_users_id_key UNIQUE (id),
+    CONSTRAINT tblt_users_pkey PRIMARY KEY (user_id),
+    CONSTRAINT tblt_users_role_check CHECK (
+        (
+            (role) :: text = ANY (
+                (
+                    ARRAY [ 'admin' :: CHARACTER VARYING,
+                    'client' :: CHARACTER VARYING,
+                    'end_user' :: CHARACTER VARYING ]
+                ) :: text [ ]
+            )
+        )
+    )
 );
 
 CREATE TABLE payment_handler.tblm_payment_details (

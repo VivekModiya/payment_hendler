@@ -34,9 +34,10 @@ func generateUniqueEpochSHA(data string) string {
 }
 
 type UserData struct {
-	Name   string `json:"name" validate:"required"`
-	Role   string `json:"role" validate:"oneof=client end_user"`
-	UserId string `json:"user_id"`
+	Name         string `json:"name" validate:"required"`
+	Role         string `json:"role" validate:"oneof=client end_user"`
+	UserID       string `json:"userId"`
+	ParentUserID string `json:"parentUserId,omitempty" validate:"required"`
 }
 
 func (u *User) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +63,7 @@ func (u *User) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	var uniqueSHA = generateUniqueEpochSHA(user.Name)
 
-	res, err := u.DB.CreateUser(r.Context(), _db.CreateUserParams{UserID: uniqueSHA, Role: user.Role, Name: user.Name})
+	res, err := u.DB.CreateUser(r.Context(), _db.CreateUserParams{UserID: uniqueSHA, Role: user.Role, Name: user.Name, ParentUserID: user.ParentUserID})
 
 	if err != nil {
 		formatting.WriteError(w, []string{err.Error()}, http.StatusInternalServerError)
@@ -73,7 +74,7 @@ func (u *User) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	jsonResponse.Name = res.Name
 	jsonResponse.Role = res.Role
-	jsonResponse.UserId = res.UserID
+	jsonResponse.UserID = res.UserID
 
 	formatting.WriteJSONResponse(w, &jsonResponse)
 }

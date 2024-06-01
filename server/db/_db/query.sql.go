@@ -80,17 +80,18 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO
-  payment_handler.tblm_users (user_id, "role", "name")
+  payment_handler.tblm_users (user_id, "role", "name", parent_user_id)
 VALUES
-  ($1, $2, $3) RETURNING user_id,
+  ($1, $2, $3, $4) RETURNING user_id,
   "name",
   "role"
 `
 
 type CreateUserParams struct {
-	UserID string
-	Role   string
-	Name   string
+	UserID       string
+	Role         string
+	Name         string
+	ParentUserID string
 }
 
 type CreateUserRow struct {
@@ -100,7 +101,12 @@ type CreateUserRow struct {
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.UserID, arg.Role, arg.Name)
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.UserID,
+		arg.Role,
+		arg.Name,
+		arg.ParentUserID,
+	)
 	var i CreateUserRow
 	err := row.Scan(&i.UserID, &i.Name, &i.Role)
 	return i, err
@@ -153,10 +159,13 @@ SELECT
 FROM
   payment_handler.tblm_payment_details pd
 WHERE
-  received_from ILIKE '%' || $1 :: VARCHAR || '%'
-  OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%'
-  AND (
-    (
+  (
+    received_from ILIKE '%' || $1 :: VARCHAR || '%'
+    OR CAST(sum_of_rupees AS VARCHAR) ILIKE '%' || $1 :: VARCHAR || '%'
+  )
+  AND CASE
+    WHEN $3 :: BOOLEAN = FALSE THEN pd.user_id = $2 :: VARCHAR
+    ELSE (
       SELECT
         role
       FROM
@@ -167,19 +176,19 @@ WHERE
     OR pd.user_id = $2
     OR (
       SELECT
-        user_id
+        parent_user_id
       FROM
-        payment_handler.parent_user us
+        payment_handler.tblm_users us
       WHERE
         us.user_id = pd.user_id
-        AND parent_user_id = $2
-    ) = pd.user_id
-  )
+    ) = $2
+  END
 `
 
 type ListPaymentDetailsParams struct {
 	Column1 string
-	UserID  string
+	Column2 string
+	Column3 bool
 }
 
 type ListPaymentDetailsRow struct {
@@ -191,7 +200,7 @@ type ListPaymentDetailsRow struct {
 }
 
 func (q *Queries) ListPaymentDetails(ctx context.Context, arg ListPaymentDetailsParams) ([]ListPaymentDetailsRow, error) {
-	rows, err := q.db.QueryContext(ctx, listPaymentDetails, arg.Column1, arg.UserID)
+	rows, err := q.db.QueryContext(ctx, listPaymentDetails, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}

@@ -6,6 +6,7 @@ package _db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type PaymentHandlerParentUser struct {
@@ -29,9 +30,10 @@ type PaymentHandlerTblmPaymentDetail struct {
 }
 
 type PaymentHandlerTblmUser struct {
-	ID        sql.NullInt32
-	UserID    string
-	Name      string
-	Role      string
-	CreatedAt sql.NullTime
+	ID           int32
+	UserID       string
+	Role         string
+	CreatedAt    time.Time
+	Name         string
+	ParentUserID string
 }
