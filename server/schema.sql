@@ -19,3 +19,13 @@ CREATE TABLE payment_handler.tblm_payment_details (
     is_active BOOLEAN DEFAULT TRUE,
     user_id VARCHAR(255) REFERENCES payment_handler.tblm_users(user_id)
 );
+
+CREATE TABLE payment_handler.parent_user (
+    id serial4 NOT NULL,
+    user_id VARCHAR NOT NULL,
+    parent_user_id VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT parent_user_fk_user FOREIGN KEY (user_id) REFERENCES payment_handler.tblm_users(user_id),
+    CONSTRAINT parent_user_fk_parent FOREIGN KEY (parent_user_id) REFERENCES payment_handler.tblm_users(user_id)
+);

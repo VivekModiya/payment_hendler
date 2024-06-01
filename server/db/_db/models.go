@@ -8,6 +8,14 @@ import (
 	"database/sql"
 )
 
+type PaymentHandlerParentUser struct {
+	ID           int32
+	UserID       string
+	ParentUserID string
+	CreatedAt    sql.NullTime
+	IsActive     bool
+}
+
 type PaymentHandlerTblmPaymentDetail struct {
 	ID           sql.NullInt32
 	Date         int64
