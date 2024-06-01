@@ -34,9 +34,9 @@ func generateUniqueEpochSHA(data string) string {
 }
 
 type UserData struct {
-	Name         string `json:"name" validate:"required"`
-	Role         string `json:"role" validate:"oneof=client end_user"`
-	UserID       string `json:"userId"`
+	Name         string `json:"name,omitempty" validate:"required"`
+	Role         string `json:"role,omitempty" validate:"oneof=client end_user"`
+	UserID       string `json:"userId,omitempty"`
 	ParentUserID string `json:"parentUserId,omitempty" validate:"required"`
 }
 

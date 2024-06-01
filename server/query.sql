@@ -79,3 +79,12 @@ WHERE
         us.user_id = pd.user_id
     ) = $2
   END;
+
+-- name: LoginUser :one
+SELECT
+  user_id,
+  role
+FROM
+  payment_handler.tblm_users us
+WHERE
+  us.user_id = $1 :: VARCHAR;

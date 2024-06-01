@@ -227,3 +227,25 @@ func (q *Queries) ListPaymentDetails(ctx context.Context, arg ListPaymentDetails
 	}
 	return items, nil
 }
+
+const loginUser = `-- name: LoginUser :one
+SELECT
+  user_id,
+  role
+FROM
+  payment_handler.tblm_users us
+WHERE
+  us.user_id = $1 :: VARCHAR
+`
+
+type LoginUserRow struct {
+	UserID string
+	Role   string
+}
+
+func (q *Queries) LoginUser(ctx context.Context, dollar_1 string) (LoginUserRow, error) {
+	row := q.db.QueryRowContext(ctx, loginUser, dollar_1)
+	var i LoginUserRow
+	err := row.Scan(&i.UserID, &i.Role)
+	return i, err
+}
