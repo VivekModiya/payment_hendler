@@ -4,34 +4,24 @@ import { Box, Typography } from '@mui/material';
 import Logo from './AdarshwadiLogo.jpg';
 import { forwardRef } from 'react';
 import { numToRupeesText } from './numToRupeesText';
+import { GetPaymentDetailsResponse } from '../../../api/getPaymentDetails';
 
-interface TemplateProps {
-    date: string;
-    id: string;
-    receivedFrom: string;
-    pan: string;
-    address: string;
-    sumOfRupees: number;
-    paymentReference: string;
-    drawnOn: string;
-}
-
-export const Template = forwardRef<HTMLElement, TemplateProps>(function (
-    props,
-    ref
-) {
+export const Template = forwardRef<
+    HTMLElement,
+    GetPaymentDetailsResponse['data']
+>(function (props, ref) {
     const {
         date,
-        id,
-        receivedFrom,
+        paymentDetailId,
+        receiveFrom,
         pan,
         address,
         sumOfRupees,
-        paymentReference,
+        transferNo,
         drawnOn,
-    } = props;
+    } = props ?? ({} as GetPaymentDetailsResponse['data']);
 
-    const sumOfRupeesStr = numToRupeesText(sumOfRupees);
+    const sumOfRupeesStr = numToRupeesText(Number(sumOfRupees));
     return (
         <>
             <Box
@@ -252,7 +242,7 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                 }}
                                 left={190}
                             >
-                                {id}
+                                {paymentDetailId}
                             </Typography>
                             <Typography
                                 color={'#19018c'}
@@ -307,7 +297,7 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                 }}
                                 left={580}
                             >
-                                {receivedFrom}
+                                {receiveFrom}
                             </Typography>
                         </Box>
                         <Box
@@ -351,11 +341,11 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                 left={8}
                                 top={-20}
                             >
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 &nbsp; &nbsp; &nbsp; {address}
                             </Typography>
                         </Box>
@@ -439,7 +429,7 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                 }}
                                 left={800}
                             >
-                                {paymentReference}
+                                {transferNo}
                             </Typography>
                         </Box>
                         <Box
@@ -487,6 +477,7 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                     borderColor={'#D13232'}
                                     bgcolor={'#ffffff'}
                                     display={'flex'}
+                                    position={'relative'}
                                 >
                                     <Box
                                         width={50}
@@ -513,10 +504,10 @@ export const Template = forwardRef<HTMLElement, TemplateProps>(function (
                                             alignSelf: 'center',
                                             fontFamily: 'sans-serif',
                                         }}
-                                        left={800}
+                                        left={70}
                                     >
                                         {new Intl.NumberFormat().format(
-                                            sumOfRupees
+                                            Number(sumOfRupees)
                                         )}
                                         /-
                                     </Typography>

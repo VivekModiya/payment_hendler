@@ -6,19 +6,43 @@ import {
 } from '@mui/icons-material';
 import {
     Box,
-    Button,
+    IconButton,
     Menu,
     MenuItem,
-    MenuList,
     TextField,
     Typography,
 } from '@mui/material';
+import {
+    getPaymentList,
+    GetPaymentListResponse,
+} from '../../api/getPaymentList';
 import { List } from './List';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../app/ContextProvider';
 
 export const PaymentListing = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [allSelected, setAllSelected] = useState(false);
+
+    const { user } = useContext(GlobalContext);
+
+    const [values, setValues] = useState({
+        searchField: '',
+        userId: user.userId,
+        allSelected: 0 as 0 | 1,
+    });
+
+    const [listData, setListData] = useState<GetPaymentListResponse['data']>(
+        []
+    );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await getPaymentList(values);
+            setListData(res?.data ?? []);
+        };
+        fetchData();
+    }, [values.allSelected, values.searchField]);
+
     return (
         <Box
             height={'100%'}
@@ -56,6 +80,13 @@ export const PaymentListing = () => {
                     size='small'
                     fullWidth
                     placeholder='Search Name or Amount'
+                    value={values.searchField}
+                    onChange={(e) =>
+                        setValues((prev) => ({
+                            ...prev,
+                            searchField: e.target.value.trim(),
+                        }))
+                    }
                     InputProps={{
                         startAdornment: <Search sx={{ color: '#999999 ' }} />,
                         endAdornment: (
@@ -63,28 +94,34 @@ export const PaymentListing = () => {
                         ),
                     }}
                 />
-                <Button
-                    variant='outlined'
-                    sx={{ px: 0 }}
+                <IconButton
                     //@ts-ignore
                     onClick={(e) => setAnchorEl(e.currentTarget)}
+                    sx={{ bgcolor: 'primary' }}
                 >
                     <FilterAltOutlined />
-                </Button>
-                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)}>
+                </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    elevation={1}
+                    variant='menu'
+                >
                     <MenuItem
-                        selected={!allSelected}
+                        selected={!Boolean(values.allSelected)}
                         onClick={() => {
-                            setAllSelected(false);
+                            setValues((prev) => ({ ...prev, allSelected: 0 }));
                             setAnchorEl(null);
                         }}
                     >
                         My entries
                     </MenuItem>
                     <MenuItem
-                        selected={allSelected}
+                        selected={Boolean(values.allSelected)}
                         onClick={() => {
-                            setAllSelected(true);
+                            setValues((prev) => ({ ...prev, allSelected: 1 }));
                             setAnchorEl(null);
                         }}
                     >
@@ -103,52 +140,7 @@ export const PaymentListing = () => {
                 flexDirection={'column'}
                 boxSizing='border-box'
             >
-                <List
-                    data={[
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                        {
-                            name: 'vivek',
-                            date: 23235235,
-                            sumOfRupees: 2323,
-                            id: 1,
-                            userId: '1',
-                        },
-                    ]}
-                />
+                <List data={listData} />
             </Box>
         </Box>
     );

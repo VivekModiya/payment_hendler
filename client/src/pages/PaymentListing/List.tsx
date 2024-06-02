@@ -1,30 +1,29 @@
 import { ArrowForwardRounded } from '@mui/icons-material';
 import { Box, MenuItem, MenuList, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { GetPaymentListResponse } from '../../api/getPaymentList';
 
 export interface ListProps {
-    data: {
-        name: string;
-        id: number;
-        date: number;
-        sumOfRupees: number;
-        userId: string;
-    }[];
+    data: GetPaymentListResponse['data'];
 }
 
 export const List = (props: ListProps) => {
-    const { data } = props;
+    const { data = [] } = props;
 
     const navigate = useNavigate();
     return (
         <MenuList sx={{ width: '100%' }}>
-            {data.map((obj, i) => {
-                const ruppe = new Intl.NumberFormat().format(obj.sumOfRupees);
+            {data?.map?.((obj, i) => {
+                const ruppe = new Intl.NumberFormat().format(
+                    Number(obj.sumOfRupees)
+                );
                 return (
                     <MenuItem
                         sx={{ width: '100%', p: 0 }}
                         key={i}
-                        onClick={() => navigate(`/payment-details/${obj.id}`)}
+                        onClick={() =>
+                            navigate(`/payment-details/${obj.paymentDetailId}`)
+                        }
                     >
                         <Box
                             display={'flex'}
@@ -38,7 +37,9 @@ export const List = (props: ListProps) => {
                             px={1}
                         >
                             <Box gap={1}>
-                                <Typography variant='h5'>{obj.name}</Typography>
+                                <Typography variant='h5'>
+                                    {obj.receiveFrom}
+                                </Typography>
                                 <Typography variant='body2' color='#A2A2A7'>
                                     {new Date(obj.date).toLocaleDateString()}
                                 </Typography>

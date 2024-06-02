@@ -3,6 +3,9 @@ import {
     Box,
     Button,
     CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
     Snackbar,
     TextField,
     Typography,
@@ -14,9 +17,10 @@ import { addPaymentDetails } from '../../api/addPaymentDetails';
 import { ChevronLeftRounded } from '@mui/icons-material';
 
 import dayjs from 'dayjs';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import { GlobalContext } from '../../app/ContextProvider';
 import { useNavigate } from 'react-router-dom';
+import { Template, downloadReceipt } from './RecieptTemplate';
 
 export const PaymentForm = () => {
     const { user } = useContext(GlobalContext);
@@ -45,6 +49,8 @@ export const PaymentForm = () => {
 
     const [isSubmitting, setSubmitting] = useState(false);
 
+    const [dialog, setDialog] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     const isAnyError = useMemo(
@@ -60,16 +66,18 @@ export const PaymentForm = () => {
     const handleSubmit = async () => {
         setSubmitting(true);
         const res = await addPaymentDetails(values);
-        if (res.success === true) {
+
+        if (res.success === true && res.data) {
+            setValues(res.data);
+            setDialog(true);
             setSnackbar('success');
-            setTimeout(() => {
-                navigate('/navigator');
-            }, 2000);
         } else {
             setSnackbar('error');
         }
         setSubmitting(false);
     };
+
+    const templateRef = useRef(null);
 
     return (
         <Box
@@ -383,6 +391,38 @@ export const PaymentForm = () => {
                         </Alert>
                     )}
                 </Snackbar>
+                <Dialog open={dialog} maxWidth='xs' fullWidth>
+                    <DialogContent>
+                        {/* @ts-ignore */}
+                        <Template {...values} ref={templateRef} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => {
+                                setDialog(false);
+                                navigate('/navigator');
+                            }}
+                        >
+                            Skip
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                downloadReceipt(
+                                    templateRef,
+                                    //@ts-ignore
+                                    values.paymentDetailId.toString()
+                                );
+                                setTimeout(() => {
+                                    setDialog(false);
+                                    navigate('/navigator');
+                                }, 0);
+                            }}
+                            variant='contained'
+                        >
+                            Download
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </Box>
     );

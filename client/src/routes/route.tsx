@@ -1,5 +1,5 @@
 import { Route } from '../models/Route';
-import { Login, Navigator, PaymentListing } from '../pages';
+import { Login, Navigator, PaymentDetails, PaymentListing } from '../pages';
 import { PaymentForm } from '../pages/PaymentForm';
 export const PATH = {
     LOGIN: '/login',
@@ -28,7 +28,7 @@ export const routes: Route[] = [
     {
         path: PATH.GET_DETAIL,
         exact: true,
-        component: <h1>Vivek</h1>,
+        component: <PaymentDetails />,
     },
     {
         path: PATH.LIST_DETAILS,

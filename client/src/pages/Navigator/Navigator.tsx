@@ -61,15 +61,15 @@ export const Navigator = () => {
                 className={styles.illustrationContainer}
             >
                 <Button
-                    variant='contained'
+                    variant='outlined'
                     size='large'
                     fullWidth
+                    color='primary'
                     sx={{
                         py: 2,
                         borderRadius: 4,
                         fontSize: 20,
                         fontWeight: 700,
-                        bgcolor: '#666666',
                     }}
                     onClick={() => handleClick('/payment-details/list')}
                 >
@@ -79,12 +79,13 @@ export const Navigator = () => {
                     variant='contained'
                     size='large'
                     fullWidth
+                    color='primary'
                     sx={{
                         py: 2,
                         borderRadius: 4,
                         fontSize: 20,
                         fontWeight: 700,
-                        bgcolor: '#346EEC',
+                        // bgcolor: '#346EEC',
                     }}
                     onClick={() => handleClick('/payment-details/add')}
                 >

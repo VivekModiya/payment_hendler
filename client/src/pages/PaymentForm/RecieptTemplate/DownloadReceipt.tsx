@@ -1,12 +1,15 @@
 import React from 'react';
 import { toJpeg } from 'html-to-image';
 
-export const DownloadReceipt = (elementRef: React.RefObject<HTMLElement>) => {
+export const downloadReceipt = (
+    elementRef: React.RefObject<HTMLElement>,
+    name: string
+) => {
     if (elementRef.current) {
         toJpeg(elementRef.current, { cacheBust: false })
             .then((dataUrl) => {
                 const link = document.createElement('a');
-                link.download = 'my-image-name.png';
+                link.download = name + '.jpeg';
                 link.href = dataUrl;
                 link.click();
             })
