@@ -40,8 +40,8 @@ func (p *Payment) ListPaymentDetails(w http.ResponseWriter, r *http.Request) {
 
 	for _, item := range res {
 		listItem := PaymentData{
-			ID:           item.ID.Int32,
-			UserID:       item.UserID.String,
+			ID:           item.ID,
+			UserID:       item.UserID,
 			ReceivedFrom: item.ReceivedFrom,
 			Date:         item.Date,
 			SumOfRupees:  item.SumOfRupees,

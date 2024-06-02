@@ -29,7 +29,7 @@ func (p *Payment) GetPaymentDetails(w http.ResponseWriter, r *http.Request) {
 
 	var jsonResponse PaymentData
 
-	jsonResponse.ID = res.ID.Int32
+	jsonResponse.ID = res.ID
 	jsonResponse.Date = res.Date
 	jsonResponse.ReceivedFrom = res.ReceivedFrom
 	jsonResponse.Pan = res.Pan

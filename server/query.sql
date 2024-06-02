@@ -14,7 +14,9 @@ INSERT INTO
     pan,
     address,
     sum_of_rupees,
-    user_id
+    user_id,
+    cash_cheque_transfer_no,
+    drawn_on
   )
 VALUES
   (
@@ -23,14 +25,18 @@ VALUES
     $3 :: VARCHAR,
     $4 :: TEXT,
     $5 :: BIGINT,
-    $6 :: VARCHAR
-  ) RETURNING DATE,
+    $6 :: VARCHAR,
+    $7 :: VARCHAR,
+    $8 :: VARCHAR
+  ) RETURNING "date",
   received_from,
   pan,
   address,
   sum_of_rupees,
   id,
-  user_id;
+  user_id,
+  cash_cheque_transfer_no,
+  drawn_on;
 
 -- name: GetPaymentDetails :one
 SELECT

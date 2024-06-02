@@ -16,6 +16,8 @@ type PaymentData struct {
 	SumOfRupees  string `json:"sumOfRupees,omitempty" validate:"required"`
 	ID           int32  `json:"paymentDetailId,omitempty"`
 	UserID       string `json:"userId,omitempty" validate:"required"`
+	TransferNo   string `json:"transferNo,omitempty" validate:"required"`
+	DrawnOn      string `json:"drawnOn,omitempty" validate:"required"`
 }
 
 func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +48,7 @@ func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := p.DB.AddPaymentDetails(r.Context(), _db.AddPaymentDetailsParams{Column1: payment.Date, Column2: payment.ReceivedFrom, Column3: payment.Pan, Column4: payment.Address, Column5: int64(rupees), Column6: payment.UserID})
+	res, err := p.DB.AddPaymentDetails(r.Context(), _db.AddPaymentDetailsParams{Column1: payment.Date, Column2: payment.ReceivedFrom, Column3: payment.Pan, Column4: payment.Address, Column5: int64(rupees), Column6: payment.UserID, Column7: payment.TransferNo, Column8: payment.DrawnOn})
 
 	if err != nil {
 		formatting.WriteError(w, []string{err.Error()}, http.StatusInternalServerError)
@@ -60,8 +62,10 @@ func (p *Payment) AddPaymentDetails(w http.ResponseWriter, r *http.Request) {
 	jsonResponse.Pan = res.Pan
 	jsonResponse.Address = res.Address
 	jsonResponse.SumOfRupees = res.SumOfRupees
-	jsonResponse.ID = res.ID.Int32
-	jsonResponse.UserID = res.UserID.String
+	jsonResponse.ID = res.ID
+	jsonResponse.UserID = res.UserID
+	jsonResponse.TransferNo = res.CashChequeTransferNo
+	jsonResponse.DrawnOn = res.DrawnOn
 
 	formatting.WriteJSONResponse(w, &jsonResponse)
 }

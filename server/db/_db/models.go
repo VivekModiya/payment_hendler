@@ -18,15 +18,17 @@ type PaymentHandlerParentUser struct {
 }
 
 type PaymentHandlerTblmPaymentDetail struct {
-	ID           sql.NullInt32
-	Date         int64
-	ReceivedFrom string
-	Pan          string
-	Address      string
-	SumOfRupees  string
-	CreatedAt    sql.NullTime
-	IsActive     sql.NullBool
-	UserID       sql.NullString
+	Date                 int64
+	ReceivedFrom         string
+	Pan                  string
+	Address              string
+	SumOfRupees          string
+	CreatedAt            time.Time
+	IsActive             bool
+	ID                   int32
+	UserID               string
+	CashChequeTransferNo string
+	DrawnOn              string
 }
 
 type PaymentHandlerTblmUser struct {

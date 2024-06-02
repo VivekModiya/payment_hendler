@@ -7,7 +7,6 @@ package _db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const addPaymentDetails = `-- name: AddPaymentDetails :one
@@ -18,7 +17,9 @@ INSERT INTO
     pan,
     address,
     sum_of_rupees,
-    user_id
+    user_id,
+    cash_cheque_transfer_no,
+    drawn_on
   )
 VALUES
   (
@@ -27,14 +28,18 @@ VALUES
     $3 :: VARCHAR,
     $4 :: TEXT,
     $5 :: BIGINT,
-    $6 :: VARCHAR
-  ) RETURNING DATE,
+    $6 :: VARCHAR,
+    $7 :: VARCHAR,
+    $8 :: VARCHAR
+  ) RETURNING "date",
   received_from,
   pan,
   address,
   sum_of_rupees,
   id,
-  user_id
+  user_id,
+  cash_cheque_transfer_no,
+  drawn_on
 `
 
 type AddPaymentDetailsParams struct {
@@ -44,16 +49,20 @@ type AddPaymentDetailsParams struct {
 	Column4 string
 	Column5 int64
 	Column6 string
+	Column7 string
+	Column8 string
 }
 
 type AddPaymentDetailsRow struct {
-	Date         int64
-	ReceivedFrom string
-	Pan          string
-	Address      string
-	SumOfRupees  string
-	ID           sql.NullInt32
-	UserID       sql.NullString
+	Date                 int64
+	ReceivedFrom         string
+	Pan                  string
+	Address              string
+	SumOfRupees          string
+	ID                   int32
+	UserID               string
+	CashChequeTransferNo string
+	DrawnOn              string
 }
 
 func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsParams) (AddPaymentDetailsRow, error) {
@@ -64,6 +73,8 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 		arg.Column4,
 		arg.Column5,
 		arg.Column6,
+		arg.Column7,
+		arg.Column8,
 	)
 	var i AddPaymentDetailsRow
 	err := row.Scan(
@@ -74,6 +85,8 @@ func (q *Queries) AddPaymentDetails(ctx context.Context, arg AddPaymentDetailsPa
 		&i.SumOfRupees,
 		&i.ID,
 		&i.UserID,
+		&i.CashChequeTransferNo,
+		&i.DrawnOn,
 	)
 	return i, err
 }
@@ -127,7 +140,7 @@ WHERE
 `
 
 type GetPaymentDetailsRow struct {
-	ID           sql.NullInt32
+	ID           int32
 	Date         int64
 	ReceivedFrom string
 	Pan          string
@@ -195,8 +208,8 @@ type ListPaymentDetailsRow struct {
 	ReceivedFrom string
 	Date         int64
 	SumOfRupees  string
-	UserID       sql.NullString
-	ID           sql.NullInt32
+	UserID       string
+	ID           int32
 }
 
 func (q *Queries) ListPaymentDetails(ctx context.Context, arg ListPaymentDetailsParams) ([]ListPaymentDetailsRow, error) {
