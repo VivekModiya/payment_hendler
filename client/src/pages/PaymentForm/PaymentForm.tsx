@@ -6,6 +6,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    IconButton,
     Snackbar,
     TextField,
     Typography,
@@ -106,7 +107,9 @@ export const PaymentForm = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <ChevronLeftRounded fontSize='medium' />
+                    <IconButton onClick={() => {navigate('/navigator')}}>
+                        <ChevronLeftRounded fontSize='medium' />
+                    </IconButton>
                 </Box>
                 <Typography variant='h5' fontWeight={700}>
                     Fill the Form

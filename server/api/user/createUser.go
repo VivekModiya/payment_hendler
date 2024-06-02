@@ -28,7 +28,7 @@ func generateUniqueEpochSHA(data string) string {
 	hashedBytes := hash.Sum(nil)
 
 	// Convert hashed bytes to a hexadecimal string
-	sha := hex.EncodeToString(hashedBytes)
+	sha := hex.EncodeToString(hashedBytes)[:10]
 
 	return sha
 }

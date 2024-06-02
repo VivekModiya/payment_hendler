@@ -45,7 +45,10 @@ SELECT
   received_from,
   pan,
   address,
-  sum_of_rupees
+  sum_of_rupees,
+  user_id,
+  drawn_on,
+  cash_cheque_transfer_no
 FROM
   payment_handler.tblm_payment_details
 WHERE

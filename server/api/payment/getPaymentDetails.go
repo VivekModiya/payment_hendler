@@ -35,6 +35,9 @@ func (p *Payment) GetPaymentDetails(w http.ResponseWriter, r *http.Request) {
 	jsonResponse.Pan = res.Pan
 	jsonResponse.Address = res.Address
 	jsonResponse.SumOfRupees = res.SumOfRupees
+	jsonResponse.DrawnOn = res.DrawnOn
+	jsonResponse.UserID = res.UserID
+	jsonResponse.TransferNo = res.CashChequeTransferNo
 
 	formatting.WriteJSONResponse(w, &jsonResponse)
 }

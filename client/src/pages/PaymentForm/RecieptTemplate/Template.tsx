@@ -103,6 +103,7 @@ export const Template = forwardRef<
                                         left: 20,
                                         top: 60,
                                         width: 140,
+                                        borderRadius: 8,
                                     }}
                                 />
                                 <svg

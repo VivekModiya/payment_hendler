@@ -132,7 +132,10 @@ SELECT
   received_from,
   pan,
   address,
-  sum_of_rupees
+  sum_of_rupees,
+  user_id,
+  drawn_on,
+  cash_cheque_transfer_no
 FROM
   payment_handler.tblm_payment_details
 WHERE
@@ -140,12 +143,15 @@ WHERE
 `
 
 type GetPaymentDetailsRow struct {
-	ID           int32
-	Date         int64
-	ReceivedFrom string
-	Pan          string
-	Address      string
-	SumOfRupees  string
+	ID                   int32
+	Date                 int64
+	ReceivedFrom         string
+	Pan                  string
+	Address              string
+	SumOfRupees          string
+	UserID               string
+	DrawnOn              string
+	CashChequeTransferNo string
 }
 
 func (q *Queries) GetPaymentDetails(ctx context.Context, dollar_1 int32) (GetPaymentDetailsRow, error) {
@@ -158,6 +164,9 @@ func (q *Queries) GetPaymentDetails(ctx context.Context, dollar_1 int32) (GetPay
 		&i.Pan,
 		&i.Address,
 		&i.SumOfRupees,
+		&i.UserID,
+		&i.DrawnOn,
+		&i.CashChequeTransferNo,
 	)
 	return i, err
 }

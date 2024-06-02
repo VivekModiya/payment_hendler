@@ -7,6 +7,7 @@ export const PATH = {
     ADD_DETAIL: '/payment-details/add',
     GET_DETAIL: '/payment-details/:id',
     LIST_DETAILS: '/payment-details/list',
+    OTHERS: '*',
 };
 
 export const routes: Route[] = [

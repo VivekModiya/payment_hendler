@@ -19,6 +19,7 @@ import {
 import { List } from './List';
 import { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../../app/ContextProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const PaymentListing = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -34,6 +35,8 @@ export const PaymentListing = () => {
     const [listData, setListData] = useState<GetPaymentListResponse['data']>(
         []
     );
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,7 +72,9 @@ export const PaymentListing = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <ChevronLeftRounded fontSize='medium' />
+                    <IconButton onClick={() => navigate('/navigator')}>
+                        <ChevronLeftRounded fontSize='medium' />
+                    </IconButton>
                 </Box>
                 <Typography variant='h5' fontWeight={700}>
                     Previous Entries
