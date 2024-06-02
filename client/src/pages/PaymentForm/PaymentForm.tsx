@@ -1,30 +1,74 @@
 import {
+    Alert,
     Box,
     Button,
-    InputAdornment,
+    CircularProgress,
+    Snackbar,
     TextField,
     Typography,
 } from '@mui/material';
-import { toPng, toJpeg } from 'html-to-image';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { addPaymentDetails } from '../../api/addPaymentDetails';
 
-import { ChevronLeftRounded, MailOutlineRounded } from '@mui/icons-material';
-import { useRef } from 'react';
+import { ChevronLeftRounded } from '@mui/icons-material';
+
+import dayjs from 'dayjs';
+import { useContext, useMemo, useState } from 'react';
+import { GlobalContext } from '../../app/ContextProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const PaymentForm = () => {
-    const elementRef = useRef<HTMLElement>(null);
+    const { user } = useContext(GlobalContext);
 
-    const htmlToImageConvert = () => {
-        if (elementRef.current)
-            toJpeg(elementRef.current, { cacheBust: false })
-                .then((dataUrl) => {
-                    const link = document.createElement('a');
-                    link.download = 'my-image-name.png';
-                    link.href = dataUrl;
-                    link.click();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    const [errors, setErrors] = useState({
+        date: '',
+        receiveFrom: 'Required field',
+        pan: 'Required field',
+        address: 'Required field',
+        sumOfRupees: 'Required field',
+        transferNo: 'Required field',
+        drawnOn: 'Required field',
+    });
+    const [values, setValues] = useState({
+        date: new Date().getTime(),
+        receiveFrom: '',
+        pan: '',
+        address: '',
+        userId: user.userId,
+        sumOfRupees: '',
+        transferNo: '',
+        drawnOn: '',
+    });
+
+    const [isTouched, setTouched] = useState(false);
+
+    const [isSubmitting, setSubmitting] = useState(false);
+
+    const navigate = useNavigate();
+
+    const isAnyError = useMemo(
+        () =>
+            Object.keys(errors).some((key) => {
+                return Boolean(errors[key as keyof typeof errors]);
+            }),
+        [errors]
+    );
+
+    const [snackbar, setSnackbar] = useState<string | boolean>(false);
+
+    const handleSubmit = async () => {
+        setSubmitting(true);
+        const res = await addPaymentDetails(values);
+        if (res.success === true) {
+            setSnackbar('success');
+            setTimeout(() => {
+                navigate('/navigator');
+            }, 2000);
+        } else {
+            setSnackbar('error');
+        }
+        setSubmitting(false);
     };
 
     return (
@@ -33,7 +77,6 @@ export const PaymentForm = () => {
             overflow={'hidden'}
             display={'flex'}
             flexDirection={'column'}
-            ref={elementRef}
             bgcolor={'#ffffff'}
         >
             <Box
@@ -73,100 +116,212 @@ export const PaymentForm = () => {
                 flexDirection={'column'}
                 boxSizing='border-box'
             >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <MobileDatePicker
+                        label='Date'
+                        sx={{ width: '100%' }}
+                        value={dayjs(values.date)}
+                        slotProps={{
+                            textField: {
+                                error: isTouched && Boolean(errors.date),
+                                helperText: isTouched ? errors.date : '',
+                            },
+                        }}
+                        onAccept={(e) => {
+                            const today = new Date(
+                                new Date().toDateString()
+                            ).getTime();
+                            const epoch =
+                                e?.toDate().getTime() ?? new Date().getTime();
+                            setValues((prev) => ({ ...prev, date: epoch }));
+                            if (today > epoch) {
+                                setErrors((prev) => ({
+                                    ...prev,
+                                    date: "Can't selecte previous date",
+                                }));
+                            } else {
+                                setErrors((prev) => ({
+                                    ...prev,
+                                    date: '',
+                                }));
+                            }
+                        }}
+                    />
+                </LocalizationProvider>
                 <TextField
-                    variant='standard'
-                    fullWidth
-                    label='Date'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
-                    }}
-                    InputLabelProps={{ sx: { color: '#999999' } }}
-                    sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
-                />
-                <TextField
-                    variant='standard'
                     fullWidth
                     label='Received From'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    value={values.receiveFrom}
+                    error={isTouched && Boolean(errors.receiveFrom)}
+                    helperText={isTouched ? errors.receiveFrom : ''}
+                    onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setValues((prev) => ({
+                            ...prev,
+                            receiveFrom: val,
+                        }));
+                        if (val === '') {
+                            setErrors((prev) => ({
+                                ...prev,
+                                receiveFrom: 'Required field',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                receiveFrom: '',
+                            }));
+                        }
                     }}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
                 />
                 <TextField
-                    variant='standard'
                     fullWidth
                     label='PAN Number'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    value={values.pan}
+                    error={isTouched && Boolean(errors.pan)}
+                    helperText={isTouched ? errors.pan : ''}
+                    onChange={(e) => {
+                        const val = e.target.value.trim().toUpperCase();
+                        setValues((prev) => ({
+                            ...prev,
+                            pan: val,
+                        }));
+                        const alphanumericRegex = /^[A-Z0-9]+$/;
+                        if (val === '') {
+                            setErrors((prev) => ({
+                                ...prev,
+                                pan: 'Required field',
+                            }));
+                        } else if (!alphanumericRegex.test(val)) {
+                            setErrors((prev) => ({
+                                ...prev,
+                                pan: 'Only Alphanumerics allowed',
+                            }));
+                        } else if (val.length !== 10) {
+                            setErrors((prev) => ({
+                                ...prev,
+                                pan: 'Must have 10 charecter only',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                pan: '',
+                            }));
+                        }
                     }}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
                 />
                 <TextField
-                    variant='standard'
                     fullWidth
                     label='Address'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    value={values.address}
+                    error={isTouched && Boolean(errors.address)}
+                    helperText={isTouched ? errors.address : ''}
+                    onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setValues((prev) => ({
+                            ...prev,
+                            address: val,
+                        }));
+
+                        if (val === '') {
+                            setErrors((prev) => ({
+                                ...prev,
+                                address: 'Required field',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                address: '',
+                            }));
+                        }
                     }}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
                 />
                 <TextField
-                    variant='standard'
                     fullWidth
                     label='Sum of Rupees ( In Number )'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    type='number'
+                    value={values.sumOfRupees}
+                    error={isTouched && Boolean(errors.sumOfRupees)}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        setValues((prev) => ({
+                            ...prev,
+                            sumOfRupees: val,
+                        }));
+
+                        if (Number(val) <= 0) {
+                            setErrors((prev) => ({
+                                ...prev,
+                                sumOfRupees: 'Required field',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                sumOfRupees: '',
+                            }));
+                        }
                     }}
+                    helperText={isTouched ? errors.sumOfRupees : ''}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
                 />
                 <TextField
-                    variant='standard'
                     fullWidth
                     label='Cash/ Cheque/ Transfer No.'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    value={values.transferNo}
+                    error={isTouched && Boolean(errors.transferNo)}
+                    helperText={isTouched ? errors.transferNo : ''}
+                    onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setValues((prev) => ({
+                            ...prev,
+                            transferNo: val,
+                        }));
+
+                        if (val === '') {
+                            setErrors((prev) => ({
+                                ...prev,
+                                transferNo: 'Required field',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                transferNo: '',
+                            }));
+                        }
                     }}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
                 />
                 <TextField
-                    variant='standard'
                     fullWidth
                     label='Drawn On'
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <MailOutlineRounded sx={{ color: '#cccccc' }} />
-                            </InputAdornment>
-                        ),
+                    value={values.drawnOn}
+                    error={isTouched && Boolean(errors.drawnOn)}
+                    helperText={isTouched ? errors.drawnOn : ''}
+                    onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setValues((prev) => ({
+                            ...prev,
+                            drawnOn: val,
+                        }));
+
+                        if (val === '') {
+                            setErrors((prev) => ({
+                                ...prev,
+                                drawnOn: 'Required field',
+                            }));
+                        } else {
+                            setErrors((prev) => ({
+                                ...prev,
+                                drawnOn: '',
+                            }));
+                        }
                     }}
                     InputLabelProps={{ sx: { color: '#999999' } }}
                     sx={{ borderBottomColor: '#E6E6E6', marginBottom: 2 }}
@@ -183,7 +338,14 @@ export const PaymentForm = () => {
                     variant='contained'
                     size='large'
                     autoCapitalize='off'
-                    onClick={htmlToImageConvert}
+                    disabled={isTouched && isAnyError}
+                    onClick={() => {
+                        if (isAnyError) {
+                            setTouched(true);
+                        } else {
+                            handleSubmit();
+                        }
+                    }}
                     sx={{
                         borderRadius: 4,
                         py: 2,
@@ -194,8 +356,33 @@ export const PaymentForm = () => {
                         flexGrow: 1,
                     }}
                 >
-                    Save and Share
+                    {isSubmitting ? <CircularProgress /> : 'Save and Share'}
                 </Button>
+                <Snackbar
+                    open={Boolean(snackbar)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={2000}
+                    message='Details added successfuly'
+                >
+                    {snackbar === 'success' ? (
+                        <Alert
+                            variant='filled'
+                            sx={{ width: 400 }}
+                            onClose={() => setSnackbar(false)}
+                        >
+                            Payment details added successfully !!
+                        </Alert>
+                    ) : (
+                        <Alert
+                            variant='filled'
+                            severity='error'
+                            sx={{ width: 400 }}
+                            onClose={() => setSnackbar(false)}
+                        >
+                            There accured some error please try again !!
+                        </Alert>
+                    )}
+                </Snackbar>
             </Box>
         </Box>
     );

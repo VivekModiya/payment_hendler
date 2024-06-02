@@ -1,10 +1,10 @@
 import { Route } from '../models/Route';
 import { Login, Navigator, PaymentListing } from '../pages';
-import { Template } from '../pages/PaymentForm';
+import { PaymentForm } from '../pages/PaymentForm';
 export const PATH = {
     LOGIN: '/login',
     NAVIGATOR: '/navigator',
-    ADD_DETAIL: 'payment-details/add',
+    ADD_DETAIL: '/payment-details/add',
     GET_DETAIL: '/payment-details/:id',
     LIST_DETAILS: '/payment-details/list',
 };
@@ -23,7 +23,7 @@ export const routes: Route[] = [
     {
         path: PATH.ADD_DETAIL,
         exact: true,
-        component: <Navigator />,
+        component: <PaymentForm />,
     },
     {
         path: PATH.GET_DETAIL,
