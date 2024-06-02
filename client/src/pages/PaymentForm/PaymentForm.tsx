@@ -5,16 +5,36 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { toPng, toJpeg } from 'html-to-image';
 
 import { ChevronLeftRounded, MailOutlineRounded } from '@mui/icons-material';
+import { useRef } from 'react';
 
 export const PaymentForm = () => {
+    const elementRef = useRef<HTMLElement>(null);
+
+    const htmlToImageConvert = () => {
+        if (elementRef.current)
+            toJpeg(elementRef.current, { cacheBust: false })
+                .then((dataUrl) => {
+                    const link = document.createElement('a');
+                    link.download = 'my-image-name.png';
+                    link.href = dataUrl;
+                    link.click();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+    };
+
     return (
         <Box
             height={'100%'}
             overflow={'hidden'}
             display={'flex'}
             flexDirection={'column'}
+            ref={elementRef}
+            bgcolor={'#ffffff'}
         >
             <Box
                 width={'100%'}
@@ -163,6 +183,7 @@ export const PaymentForm = () => {
                     variant='contained'
                     size='large'
                     autoCapitalize='off'
+                    onClick={htmlToImageConvert}
                     sx={{
                         borderRadius: 4,
                         py: 2,

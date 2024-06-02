@@ -1,18 +1,49 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-export const Template = () => {
+//@ts-ignore
+import Logo from './AdarshwadiLogo.jpg';
+import { forwardRef } from 'react';
+import { numToRupeesText } from './numToRupeesText';
+
+interface TemplateProps {
+    date: string;
+    id: string;
+    receivedFrom: string;
+    pan: string;
+    address: string;
+    sumOfRupees: number;
+    paymentReference: string;
+    drawnOn: string;
+}
+
+export const Template = forwardRef<HTMLElement, TemplateProps>(function (
+    props,
+    ref
+) {
+    const {
+        date,
+        id,
+        receivedFrom,
+        pan,
+        address,
+        sumOfRupees,
+        paymentReference,
+        drawnOn,
+    } = props;
+
+    const sumOfRupeesStr = numToRupeesText(sumOfRupees);
     return (
         <>
             <Box
                 bgcolor={'#FAEBD9'}
                 height={'1000px'}
-                marginLeft={-100}
                 width={'1500px'}
                 boxSizing={'border-box'}
                 border={16}
                 borderColor={'#DEDEDE'}
                 display={'flex'}
                 fontFamily={'TimesNewRoman'}
+                ref={ref}
             >
                 <Box
                     bgcolor={'#FAEBD9'}
@@ -47,7 +78,74 @@ export const Template = () => {
                                 marginTop={1.5}
                                 marginRight={3}
                                 bgcolor={'#ffffff'}
-                            ></Box>
+                                position={'relative'}
+                            >
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    xmlnsXlink='http://www.w3.org/1999/xlink'
+                                    viewBox='0 0 290 290'
+                                >
+                                    <path
+                                        id='SunCatcherStudio'
+                                        fill='none'
+                                        stroke='none'
+                                        d='M 32.550491,148.48008 A -108.15144,-108.15144 0 0 1 140.70194,40.328644 -108.15144,-108.15144 0 0 1 248.85338,148.48008 -108.15144,-108.15144 0 0 1 140.70194,256.63153 -108.15144,-108.15144 0 0 1 32.550491,148.48008 Z'
+                                    />
+                                    <text
+                                        font-size='34'
+                                        fill='#19018c'
+                                        letter-spacing='-1'
+                                        font-family='sans-serif'
+                                        font-weight='bold'
+                                    >
+                                        <textPath
+                                            xlinkHref='#SunCatcherStudio'
+                                            startOffset='60'
+                                        >
+                                            ADARSHWADI
+                                        </textPath>
+                                    </text>
+                                </svg>
+                                <img
+                                    src={Logo}
+                                    style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 60,
+                                        width: 140,
+                                    }}
+                                />
+                                <svg
+                                    viewBox='0 0 290 290'
+                                    width={180}
+                                    height={180}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 32,
+                                        left: -17,
+                                    }}
+                                >
+                                    <text
+                                        font-size='34'
+                                        fill='#19018c'
+                                        font-family='sans-serif'
+                                        letterSpacing={3}
+                                        font-weight='bold'
+                                    >
+                                        <textPath
+                                            xlinkHref='#curve'
+                                            startOffset='90'
+                                        >
+                                            PARTY
+                                        </textPath>
+                                    </text>
+                                    <path
+                                        id='curve'
+                                        d='M 50 150 A 150 150 0 0 0 250 200'
+                                        fill='none'
+                                    />
+                                </svg>
+                            </Box>
                             <Typography
                                 fontSize={80}
                                 component={'span'}
@@ -126,7 +224,11 @@ export const Template = () => {
                             </Typography>
                         </Box>
 
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -140,6 +242,19 @@ export const Template = () => {
                                 Receipt No. :
                             </Typography>
                             <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                    fontWeight: '800',
+                                }}
+                                left={190}
+                            >
+                                {id}
+                            </Typography>
+                            <Typography
                                 color={'#19018c'}
                                 sx={{
                                     fontFamily: 'serif',
@@ -151,8 +266,24 @@ export const Template = () => {
                             >
                                 Date : ___________________
                             </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={1111}
+                            >
+                                {date}
+                            </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -166,8 +297,24 @@ export const Template = () => {
                                 Received with thanks from Mr./Mrs./Ms.
                                 ___________________________________________________
                             </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={580}
+                            >
+                                {receivedFrom}
+                            </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -181,8 +328,42 @@ export const Template = () => {
                                 PAN : _______________________ Address
                                 _________________________________________________
                             </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={150}
+                            >
+                                {pan}
+                            </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 2.25,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={8}
+                                top={-20}
+                            >
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{' '}
+                                &nbsp; &nbsp; &nbsp; {address}
+                            </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -196,7 +377,11 @@ export const Template = () => {
                                 _____________________________________________________________________________________
                             </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -210,8 +395,25 @@ export const Template = () => {
                                 the sum of Rupees
                                 _____________________________________________________________________
                             </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={270}
+                            >
+                                {sumOfRupeesStr}
+                            </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -227,8 +429,24 @@ export const Template = () => {
                                 Transfer No.
                                 _________________________________________
                             </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={800}
+                            >
+                                {paymentReference}
+                            </Typography>
                         </Box>
-                        <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            position={'relative'}
+                        >
                             <Typography
                                 color={'#19018c'}
                                 sx={{
@@ -242,6 +460,18 @@ export const Template = () => {
                             >
                                 Drawn on
                                 ____________________________________________________________________________________
+                            </Typography>
+                            <Typography
+                                position={'absolute'}
+                                style={{
+                                    fontSize: 28,
+                                    lineHeight: 1,
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                }}
+                                left={170}
+                            >
+                                {drawnOn}
                             </Typography>
                         </Box>
                         <Box
@@ -275,6 +505,21 @@ export const Template = () => {
                                             ₹
                                         </Typography>
                                     </Box>
+                                    <Typography
+                                        position={'absolute'}
+                                        style={{
+                                            fontSize: 28,
+                                            lineHeight: 1,
+                                            alignSelf: 'center',
+                                            fontFamily: 'sans-serif',
+                                        }}
+                                        left={800}
+                                    >
+                                        {new Intl.NumberFormat().format(
+                                            sumOfRupees
+                                        )}
+                                        /-
+                                    </Typography>
                                 </Box>
                                 <Typography fontSize={24} color={'#19018c'}>
                                     *Subjet to realization of cheque.
@@ -329,7 +574,6 @@ export const Template = () => {
                     </Box>
                 </Box>
             </Box>
-            <Button>Click</Button>
         </>
     );
-};
+});

@@ -1,2 +1,2 @@
 export * from './PaymentForm';
-export * from '../../app/Template';
+export * from './RecieptTemplate';
