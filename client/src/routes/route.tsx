@@ -23,7 +23,7 @@ export const routes: Route[] = [
     {
         path: PATH.ADD_DETAIL,
         exact: true,
-        component: <Template />,
+        component: <Navigator />,
     },
     {
         path: PATH.GET_DETAIL,

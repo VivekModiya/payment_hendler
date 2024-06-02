@@ -1,18 +1,48 @@
-import { Box, Button, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    CircularProgress,
+    IconButton,
+    TextField,
+} from '@mui/material';
+import { login } from '../../api/login';
 import { LoginIllustration } from './Illustration';
 //@ts-ignore
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
+import { GlobalContext } from '../../app/ContextProvider';
 
 export const Login = () => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
-    const handleClick = (path: string) => {
-        navigate(path);
+    if (pathname !== '/login') {
+        navigate('/login');
+    }
+
+    const [visibility, setVisibility] = useState(false);
+    const [code, setCode] = useState('');
+    const [isSubmitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    const { setUser } = useContext(GlobalContext);
+
+    const handleSubmit = async () => {
+        setSubmitting(true);
+        const res = await login(code);
+        console.log({ res });
+        if (res.success === true && res?.data?.role && res?.data?.userId) {
+            setUser({ role: res.data.role, userId: res.data.userId });
+            navigate('/navigator');
+        } else {
+            setError('Some error accured !!');
+        }
+        setSubmitting(false);
     };
 
     return (
-        <Box paddingTop={8}>
+        <Box>
             <Box
                 width='100%'
                 display='flex'
@@ -30,48 +60,39 @@ export const Login = () => {
                 alignItems={'center'}
                 justifyContent={'start'}
                 paddingX={8}
-                marginBottom={8}
-                boxSizing='border-box'
-                textAlign='center'
-            >
-                <Typography
-                    variant='h4'
-                    fontWeight={700}
-                    lineHeight={1.4}
-                    marginBottom={2}
-                >
-                    Payment handling made easy!
-                </Typography>
-                <Typography variant='h6' color='#666666'>
-                    Handle your payments at one place. Create and share files.
-                </Typography>
-            </Box>
-            <Box
-                width='100%'
-                display='flex'
-                flexDirection={'column'}
-                alignItems={'center'}
-                justifyContent={'start'}
-                paddingX={8}
                 boxSizing='border-box'
                 textAlign='center'
                 gap={4}
             >
-                <Button
-                    variant='contained'
-                    size='large'
+                <TextField
                     fullWidth
-                    sx={{
-                        py: 2,
-                        borderRadius: 4,
-                        fontSize: 20,
-                        fontWeight: 700,
-                        bgcolor: '#666666',
+                    size='medium'
+                    label='Security code'
+                    placeholder='Enter you security code'
+                    sx={{ fontSize: 24 }}
+                    type={visibility ? 'text' : 'password'}
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.trim())}
+                    error={Boolean(error)}
+                    helperText={error}
+                    InputProps={{
+                        endAdornment: (
+                            <IconButton
+                                onClick={() => setVisibility((prev) => !prev)}
+                            >
+                                {!visibility ? (
+                                    <VisibilityOutlined
+                                        sx={{ color: '#999999' }}
+                                    />
+                                ) : (
+                                    <VisibilityOffOutlined
+                                        sx={{ color: '#999999' }}
+                                    />
+                                )}
+                            </IconButton>
+                        ),
                     }}
-                    onClick={() => handleClick('/payment-details/list')}
-                >
-                    View Previous Entries
-                </Button>
+                ></TextField>
                 <Button
                     variant='contained'
                     size='large'
@@ -83,9 +104,10 @@ export const Login = () => {
                         fontWeight: 700,
                         bgcolor: '#346EEC',
                     }}
-                    onClick={() => handleClick('/payment-details/add')}
+                    disabled={isSubmitting || code.trim().length === 0}
+                    onClick={handleSubmit}
                 >
-                    Go to Form
+                    {isSubmitting ? <CircularProgress /> : 'Submit'}
                 </Button>
             </Box>
         </Box>
