@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { Route } from '../models/Route';
-import { Login, Navigator, PaymentDetails, PaymentListing } from '../pages';
+import { CreateUser, Login, Navigator, PaymentDetails, PaymentListing } from '../pages';
 import { PaymentForm } from '../pages/PaymentForm';
 export const PATH = {
     HOME: '/',
@@ -9,6 +9,7 @@ export const PATH = {
     ADD_DETAIL: '/payment-details/add',
     GET_DETAIL: '/payment-details/:id',
     LIST_DETAILS: '/payment-details/list',
+    CREATE_USER: '/create-user',
     OTHERS: '*',
 };
 
@@ -37,6 +38,11 @@ export const routes: Route[] = [
         path: PATH.LIST_DETAILS,
         exact: true,
         component: <PaymentListing />,
+    },
+    {
+        path: PATH.CREATE_USER,
+        exact: true,
+        component: <CreateUser />,
     },
     {
         path: PATH.OTHERS,

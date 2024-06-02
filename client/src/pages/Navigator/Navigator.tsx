@@ -3,6 +3,8 @@ import { Illustration } from './Illustration';
 //@ts-ignore
 import styles from './index.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { GlobalContext } from '../../app/ContextProvider';
 
 export const Navigator = () => {
     const navigate = useNavigate();
@@ -11,6 +13,7 @@ export const Navigator = () => {
         navigate(path);
     };
 
+    const { user } = useContext(GlobalContext);
     return (
         <Box paddingTop={8}>
             <Box
@@ -57,16 +60,33 @@ export const Navigator = () => {
                 paddingX={8}
                 boxSizing='border-box'
                 textAlign='center'
-                gap={4}
+                gap={2}
                 className={styles.illustrationContainer}
             >
+                {(user.role === 'client' || user.role === 'admin') && (
+                    <Button
+                        variant='outlined'
+                        size='large'
+                        fullWidth
+                        color='primary'
+                        sx={{
+                            py: 1.5,
+                            borderRadius: 4,
+                            fontSize: 20,
+                            fontWeight: 700,
+                        }}
+                        onClick={() => handleClick('/create-user')}
+                    >
+                        Create User
+                    </Button>
+                )}
                 <Button
                     variant='outlined'
                     size='large'
                     fullWidth
                     color='primary'
                     sx={{
-                        py: 2,
+                        py: 1.5,
                         borderRadius: 4,
                         fontSize: 20,
                         fontWeight: 700,
@@ -81,7 +101,7 @@ export const Navigator = () => {
                     fullWidth
                     color='primary'
                     sx={{
-                        py: 2,
+                        py: 1.5,
                         borderRadius: 4,
                         fontSize: 20,
                         fontWeight: 700,

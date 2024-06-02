@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ContextValue {
-    user: { role: 'admin' | 'client' | 'end_user'; userId: string };
+    user: { role: 'admin' | 'client' | 'endUser'; userId: string };
     setUser: React.Dispatch<React.SetStateAction<ContextValue['user']>>;
 }
 
