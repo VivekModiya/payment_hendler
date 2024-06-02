@@ -15,7 +15,7 @@ CREATE TABLE payment_handler.tblm_users (
                 (
                     ARRAY [ 'admin' :: CHARACTER VARYING,
                     'client' :: CHARACTER VARYING,
-                    'end_user' :: CHARACTER VARYING ]
+                    'endUser' :: CHARACTER VARYING ]
                 ) :: text [ ]
             )
         )
