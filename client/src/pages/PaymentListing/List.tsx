@@ -36,16 +36,30 @@ export const List = (props: ListProps) => {
                             borderColor={'#E6E6E6'}
                             px={1}
                         >
-                            <Box gap={1}>
-                                <Typography variant='h5'>
+                            <Box gap={1} maxWidth={250}>
+                                <Typography
+                                    fontSize={18}
+                                    sx={{ maxWidth: '100%' }}
+                                    noWrap={true}
+                                >
                                     {obj.receiveFrom}
                                 </Typography>
                                 <Typography variant='body2' color='#A2A2A7'>
                                     {new Date(obj.date).toLocaleDateString()}
                                 </Typography>
                             </Box>
-                            <Box display='flex' alignItems={'center'}>
-                                <Typography variant='h6' marginRight={2}>
+                            <Box
+                                display='flex'
+                                alignItems={'center'}
+                                flexShrink={0}
+                            >
+                                <Typography
+                                    variant='h6'
+                                    marginRight={2}
+                                    fontSize={18}
+                                    maxWidth={150}
+                                    noWrap={true}
+                                >
                                     ₹ {ruppe}
                                 </Typography>
                                 <ArrowForwardRounded

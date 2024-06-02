@@ -1,6 +1,6 @@
 import { Section } from '../components/Section/Sections';
 import { routes } from '../routes/route';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ContextProvider } from './ContextProvider.tsx';
 import { ValidateUser } from './ValidateUser.tsx';
 import './app.css';
@@ -9,7 +9,7 @@ import '@fontsource/roboto';
 export const App = () => {
     return (
         <ContextProvider>
-            <HashRouter>
+            <BrowserRouter>
                 <Section>
                     <Routes>
                         {routes.map((route) => {
@@ -26,7 +26,7 @@ export const App = () => {
                         <Route path='/'></Route>
                     </Routes>
                 </Section>
-            </HashRouter>
+            </BrowserRouter>
         </ContextProvider>
     );
 };

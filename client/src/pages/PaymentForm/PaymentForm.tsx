@@ -107,7 +107,11 @@ export const PaymentForm = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <IconButton onClick={() => {navigate('/navigator')}}>
+                    <IconButton
+                        onClick={() => {
+                            navigate('/navigator');
+                        }}
+                    >
                         <ChevronLeftRounded fontSize='medium' />
                     </IconButton>
                 </Box>
@@ -166,7 +170,7 @@ export const PaymentForm = () => {
                     error={isTouched && Boolean(errors.receiveFrom)}
                     helperText={isTouched ? errors.receiveFrom : ''}
                     onChange={(e) => {
-                        const val = e.target.value.trim();
+                        const val = e.target.value;
                         setValues((prev) => ({
                             ...prev,
                             receiveFrom: val,
@@ -231,7 +235,7 @@ export const PaymentForm = () => {
                     error={isTouched && Boolean(errors.address)}
                     helperText={isTouched ? errors.address : ''}
                     onChange={(e) => {
-                        const val = e.target.value.trim();
+                        const val = e.target.value;
                         setValues((prev) => ({
                             ...prev,
                             address: val,
@@ -288,7 +292,7 @@ export const PaymentForm = () => {
                     error={isTouched && Boolean(errors.transferNo)}
                     helperText={isTouched ? errors.transferNo : ''}
                     onChange={(e) => {
-                        const val = e.target.value.trim();
+                        const val = e.target.value;
                         setValues((prev) => ({
                             ...prev,
                             transferNo: val,
@@ -316,7 +320,7 @@ export const PaymentForm = () => {
                     error={isTouched && Boolean(errors.drawnOn)}
                     helperText={isTouched ? errors.drawnOn : ''}
                     onChange={(e) => {
-                        const val = e.target.value.trim();
+                        const val = e.target.value;
                         setValues((prev) => ({
                             ...prev,
                             drawnOn: val,
@@ -403,7 +407,7 @@ export const PaymentForm = () => {
                         <Button
                             onClick={() => {
                                 setDialog(false);
-                                navigate('/navigator');
+                                navigate('/payment-details/list');
                             }}
                         >
                             Skip
@@ -417,7 +421,7 @@ export const PaymentForm = () => {
                                 );
                                 setTimeout(() => {
                                     setDialog(false);
-                                    navigate('/navigator');
+                                    navigate('/payment-details/list');
                                 }, 0);
                             }}
                             variant='contained'

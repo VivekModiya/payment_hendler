@@ -2,9 +2,11 @@ import {
     Alert,
     Box,
     Button,
+    Chip,
     Dialog,
     DialogActions,
     DialogContent,
+    IconButton,
     Snackbar,
     TextField,
     Typography,
@@ -21,7 +23,7 @@ import { ChevronLeftRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { GlobalContext } from '../../app/ContextProvider';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Template, downloadReceipt } from '../PaymentForm';
 
 export const PaymentDetails = () => {
@@ -62,6 +64,8 @@ export const PaymentDetails = () => {
 
     const templateRef = useRef(null);
 
+    const navigate = useNavigate();
+
     return (
         <Box
             height={'100%'}
@@ -89,11 +93,21 @@ export const PaymentDetails = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <ChevronLeftRounded fontSize='medium' />
+                    <IconButton onClick={() => navigate('/payment-details/list')}>
+                        <ChevronLeftRounded fontSize='medium' />
+                    </IconButton>
                 </Box>
                 <Typography variant='h5' fontWeight={700}>
-                    Fill the Form
+                    Fill the Form{' '}
+                    <Chip
+                        label={paymentId}
+                        color='primary'
+                        variant='outlined'
+                        sx={{ marginLeft: 0.5 }}
+                    ></Chip>
                 </Typography>
+
+                <Chip label={`User Id : ${values.userId}`}></Chip>
             </Box>
             <Box
                 width={'100%'}
